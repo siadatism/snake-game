@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+set -e
+
+error() {
+	echo -e "\e[1m\e[31m$1\e[0m"
+}
+
+bold() {
+	echo -e "\e[36m$1\e[0m"
+}
+
+verbose() {
+	echo -e "\e[1m\e[30m$1\e[0m"
+}
+
+BUILD_PATH="./bin"
+BINARY_NAME="snake-game"
+
+usage() {
+	echo "./build    Builds project"
+	echo "./build -c Clears build contents"
+	echo "./build -f Clears then build"
+	echo "./build -h Show this help"
+	echo ""
+}
+
+clear() {
+	rm -rf bin
+	rm -f snake-game
+}
+
+while getopts "hfc" flag; do
+	case "${flag}" in
+		h)
+			usage
+			exit 0
+			;;
+		c)
+			clear
+			exit 0
+			;;
+		f)
+			clear
+			;;
+
+		*)
+			usage
+			exit 1
+			;;
+	esac
+done
+
+# Build routine
+mkdir -p "${BUILD_PATH}"
+cd "${BUILD_PATH}"
+cmake ..
+make -j
+cp "${BINARY_NAME}" ..
+
+exit 0
