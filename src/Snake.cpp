@@ -4,11 +4,11 @@
 using namespace std;
 
 Snake::Snake(Point point, int size, string name, char shape, Color color, Direction direction, Point margins)
-: color(color)
-, name(name)
+: score(0)
 , increasing_length(0)
 , shape(shape)
-, score(0)
+, name(name)
+, color(color)
 {
 	head_and_body.push_back(point);
 	for(int i = 1; i < size; i++)

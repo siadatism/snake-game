@@ -18,15 +18,18 @@
 #define MEDIUM 200
 #define HARD 100
 
+#define UNUSED(x) (void)(x)
+
 using namespace std;
 
 int main()
 {
-	system("clear"); 
+	int result = system("clear");
+	UNUSED(result);
+
 	srand(time(0));	
 
     // Setting
-	int LEVEL = EASY;
 	Point margins(30 , 20);
 
 	vector<Snake*> snakes;

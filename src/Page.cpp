@@ -23,7 +23,7 @@ Page::Page(const vector<Snake*>& snakes, const vector<Food*>& foods, Point margi
 
 void Page::delete_food(Food* food)
 {
-	for (int i = 0; i < foods.size(); i++)
+	for (unsigned int i = 0; i < foods.size(); i++)
 		if (foods[i] == food)
 		{
 			foods.erase(foods.begin() + i);
@@ -45,7 +45,7 @@ void Page::move_once()
 
 void Page::erase_snake(Snake* snake)
 {	
-	for (int i = 0; i < snakes.size(); i++)
+	for (unsigned int i = 0; i < snakes.size(); i++)
 		if (snakes[i] == snake)
 		{
 			snakes.erase(snakes.begin() + i);
