@@ -10,3 +10,5 @@ add_library(snake-lib src/Snake.cpp src/Page.cpp)
 include_directories(src)
 add_executable(snake-game Main.cpp)
 target_link_libraries(snake-game snake-lib pthread)
+
+add_subdirectory(test)

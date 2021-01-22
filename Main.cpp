@@ -13,11 +13,6 @@
 #include "Snake.h"
 #include "Page.h"
 
-// Sleep time between moves
-#define EASY 300
-#define MEDIUM 200
-#define HARD 100
-
 #define UNUSED(x) (void)(x)
 
 using namespace std;
@@ -29,7 +24,7 @@ int main()
 
 	srand(time(0));	
 
-    // Setting
+    // Settings
 	Point margins(30 , 20);
 
 	vector<Snake*> snakes;
