@@ -15,8 +15,6 @@ Page::Page(const vector<Snake*>& snakes, const vector<Food*>& foods, Point margi
 : snakes(snakes)
 , foods(foods)
 , margins(margins)
-, margins_shape('#')
-, empty_shape('.')
 , end_game(false)
 {
 }	 
@@ -62,7 +60,6 @@ void Page::check_crash(Snake* snake)
 			if (snake->is_body(snake->get_head()))
 			{
 				cout << snake->get_name() << " self crash." << endl;
-				cout << snake->get_head().to_string() << endl;
 				erase_snake(snake);
 				break;
 			}
@@ -102,69 +99,6 @@ void Page::check_end_game()
 	}
 }
 
-#define gotoxy(x,y) printf("\033[%d;%dH", (y), (x))
-
-void Page::print() const
-{
-	gotoxy(0, 0);
-
-	for (Snake* snake : snakes)
-		colorized_print(snake->get_name() + " : " + to_string(snake->get_score()) + "\n", snake->get_color());
-	cout << "margins: " << margins.x() << " " << margins.y() << endl;
-
-	for (int y = 0; y <= margins.y(); y++)
-	{
-		for (int x = 0; x <= margins.x(); x++)
-		{
-			bool print_empty = true;
-
-			// Margins
-			if (x == 0 or y == 0 or x == margins.x() or y == margins.y())
-			{
-				cout << margins_shape << " ";
-				continue;
-			}
-
-			// Snakes
-			for (Snake* snake : snakes)
-			{
-				if (Point(x, y) == snake->get_head())
-				{
-					colorized_print(string(1, snake->get_shape()), WHITE);
-					cout << " ";
-					print_empty = false;
-					break;				
-				}
-
-				if (snake->is_body(Point(x, y)))
-				{	
-					colorized_print(string(1, snake->get_shape()), snake->get_color());
-					cout << " ";
-					print_empty = false;
-					break;				
-				}
-			}
-	
-			// Foods
-			for (Food* food : foods)
-			{
-				if (food->is_in(Point(x, y)))
-				{
-					colorized_print(string(1, food->get_shape()), food->get_color());
-					cout << " ";
-					print_empty = false;
-					break;
-				}
-			}
-	
-			if (print_empty)
-				cout << empty_shape << " ";
-		}
-		cout << endl;
-	}
-	cout << message << endl;
-}
-
 bool Page::is_coordinates_snakes(Point point)
 {
 	for (Snake* snake : snakes)
@@ -177,8 +111,9 @@ void Page::add_food()
 {
 	while (true)
 	{
-		int x_food = rand() % (margins.x() - 2) + 1;
-		int y_food = rand() % (margins.y() - 2) + 1;
+		// TODO add method: random_point()
+		int x_food = rand() % (margins.x - 2) + 1;
+		int y_food = rand() % (margins.y - 2) + 1;
 		Point point(x_food, y_food);
 		
 		if (!is_coordinates_snakes(point))

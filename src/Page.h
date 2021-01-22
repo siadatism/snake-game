@@ -11,9 +11,11 @@ class Page
 {
 public:
 	Page(const std::vector<Snake*>& snakes, const std::vector<Food*>& foods, Point margins);
-	void print() const;                  
 	bool is_coordinates_snakes(Point point);
 	Point get_margins() const { return margins; }
+	std::vector<Snake*> get_snakes() const { return snakes; }
+	std::vector<Food*> get_foods() const { return foods; }
+	std::string get_message() const { return message; }
 	void move_once();
 	void delete_food(Food* food);
 	void add_food(); 
@@ -27,8 +29,6 @@ private:
 	std::vector<Snake*> snakes;
 	std::vector<Food*> foods;
 	const Point margins;
-	const char margins_shape;
-	const char empty_shape;
 	bool end_game;
 	std::string message;
 };

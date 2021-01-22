@@ -23,6 +23,7 @@ public:
 	char get_shape() const { return shape; }
 	int get_size() const { return head_and_body.size(); }
 	Color get_color() const { return color; }
+	Direction get_last_direction() const { return last_direction; }
 	std::string get_name() const { return name; }
 	
 private:
@@ -34,12 +35,13 @@ private:
 	const char shape;
 	const std::string name;
 	const Color color;
+	Direction last_direction;
 };
 
 Point Snake::next_step(Point current, Direction direction, Point margins)
 {
-	int x = current.x();
-	int y = current.y();
+	int x = current.x;
+	int y = current.y;
 	switch (direction)
 	{
 		case LEFT:
@@ -55,16 +57,16 @@ Point Snake::next_step(Point current, Direction direction, Point margins)
 			y++;
 			break;
 		default:
-			throw std::string("Direction in invalid");
+			throw std::string("Snake::next_step(): Invalid direction");
 	}
 
 	if (x <= 0)
-		x = margins.x() - 1;
-	if (x >= margins.x())
+		x = margins.x - 1;
+	if (x >= margins.x)
 		x = 1;
 	if (y <= 0)
-		y = margins.y() - 1;
-	if (y >= margins.y())
+		y = margins.y - 1;
+	if (y >= margins.y)
 		y = 1;
 
 	return Point(x, y);

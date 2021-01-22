@@ -2,6 +2,8 @@
 
 #include <gtest/gtest.h>
 
+#include "Snake.h"
+
 using namespace std;
 
 
