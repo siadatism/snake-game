@@ -78,9 +78,18 @@ inline void colorized_print(std::string s, Color c)
 	std::cout << code << s << C_RESET;
 }
 
-void print(Page& page)
+void print(const Page& page)
 {
-	// TODO system("cls");
+	// TODO Add 'system(cls)' mode for unit-tests.
+
+	static bool first_time = true;
+	if (first_time)
+	{
+		int result = system("clear");
+		UNUSED(result);
+		first_time = false;
+	}
+
 	gotoxy(0, 0);
 
 	{
@@ -152,27 +161,21 @@ void print(Page& page)
 	UNUSED(result);
 }
 
-
 int main()
 {
-	int result = system("clear");
-	UNUSED(result);
-
 	srand(time(0));	
 
     // Settings
 	Point margins(30 , 20);
 
 	vector<Snake*> snakes;
-	vector<Food*> foods;
-
 	Snake S1(Point(5, 10), 4, "Soroosh", '0', BLUE, RIGHT, margins);
 	Snake S2(Point(25, 10), 4, "Mehran", '0', GREEN, LEFT, margins);
 	snakes.push_back(&S1);
 	snakes.push_back(&S2);
 
 	// Page setting
-	Page page(snakes, foods, margins);
+	Page page(snakes, margins);
 	page.add_random_food();
 
 	while (!page.is_end_game())
@@ -180,8 +183,5 @@ int main()
 		print(page);
 		this_thread::sleep_for(chrono::milliseconds(10));
 		page.move_once();
-
-		//this_thread::sleep_for(chrono::seconds(2));
-		//S1.move(&page);
 	}
 }

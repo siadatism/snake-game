@@ -13,9 +13,8 @@ Food* Page::food_at(Point point)
 	return nullptr;
 }
 
-Page::Page(const vector<Snake*>& snakes, const vector<Food*>& foods, Point margins)
+Page::Page(const vector<Snake*>& snakes, Point margins)
 : snakes(snakes)
-, foods(foods)
 , margins(margins)
 , end_game(false)
 {

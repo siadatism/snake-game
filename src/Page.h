@@ -10,7 +10,7 @@
 class Page
 {
 public:
-	Page(const std::vector<Snake*>& snakes, const std::vector<Food*>& foods, Point margins);
+	Page(const std::vector<Snake*>& snakes, Point margins);
 	bool is_coordinates_snakes(Point point) const;
 	Point get_margins() const { return margins; }
 	std::vector<Snake*> get_snakes() const { return snakes; }
