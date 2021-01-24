@@ -82,8 +82,11 @@ void print(Page& page)
 {
 	// TODO system("cls");
 	gotoxy(0, 0);
-	int result = system("setterm -cursor off");
-	UNUSED(result);
+
+	{
+		const int result = system("setterm -cursor off");
+		UNUSED(result);
+	}
 
 	const char margins_shape = '#';
 	const char empty_shape = '.';
@@ -144,6 +147,9 @@ void print(Page& page)
 		cout << endl;
 	}
 	cout << page.get_message() << endl;
+
+	const int result = system("setterm -cursor on");
+	UNUSED(result);
 }
 
 
