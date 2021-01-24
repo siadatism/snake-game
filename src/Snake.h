@@ -13,9 +13,10 @@ class Snake
 public:
 	inline static Point next_step(Point current_point, Direction direction, Point margins);
 
-	Snake(Point head, int size, std::string name, char shape, Color color, Direction direction, Point margins);
+	Snake(Point head_start_point, unsigned int size, const std::string& name, char shape, Color color,
+			Direction direction, Point margins);
 
-	void move(Page* page);
+	void move(Page& page);
 	bool is_body(Point point) const;
 	Point get_head() const { return head_and_body.front(); }
 
@@ -27,7 +28,7 @@ public:
 	std::string get_name() const { return name; }
 	
 private:
-	Direction make_decision(Page* page);
+	Direction make_decision(const Page& page);
 
 	std::deque<Point> head_and_body;
 	int score;

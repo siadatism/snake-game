@@ -2,7 +2,7 @@
 #define UTILITIES_H_
 
 #include <string>
-#include <iostream>
+#include <cstdlib>
 
 enum Direction
 {
@@ -11,6 +11,23 @@ enum Direction
 	UP,
 	DOWN
 };
+
+inline static Direction opposite(Direction direction)
+{
+	switch (direction)
+	{
+		case LEFT:
+			return RIGHT;
+		case RIGHT:
+			return LEFT;
+		case UP:
+			return DOWN;
+		case DOWN:
+			return UP;
+		default:
+			throw std::string("opposite(): Invalid direction");
+	}
+}
 
 enum Color
 {
@@ -21,9 +38,25 @@ enum Color
 	WHITE
 };
 
+inline static int get_random(int min, int max)
+{
+	if (max < min)
+		throw std::string("get_random(): Min is greater than max.");
+
+	return rand() % (max - min + 1) + min;
+}
+
 struct Point
 {
 public:
+	inline static Point get_random(Point min, Point max)
+	{
+		const int x = ::get_random(min.x, max.x);
+		const int y = ::get_random(min.y, max.y);
+
+		return Point(x, y);
+	}
+
 	Point(int x, int y)
 	: x(x)
 	, y(y)
@@ -34,7 +67,7 @@ public:
 	{}
 
 	bool operator==(const Point& other) const { return x == other.x && y == other.y; }
-	std::string to_string() const { return std::to_string(x) + ":" + std::to_string(y); }
+	std::string to_string() const { return std::to_string(x) + " : " + std::to_string(y); }
 
 	const int x, y;
 };
@@ -50,10 +83,9 @@ public:
 	{}
 
 	Point get_point() const { return *this;}
-	char get_shape() const { return shape;}
 	int get_value() const { return value;}
+	char get_shape() const { return shape;}
 	Color get_color() const { return color;}
-	bool is_in(Point point) const { return  *this == point; }
 
 private:
 	const int value;

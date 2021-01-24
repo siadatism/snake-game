@@ -3,7 +3,8 @@
 
 using namespace std;
 
-Snake::Snake(Point point, int size, string name, char shape, Color color, Direction direction, Point margins)
+Snake::Snake(Point head_start_point, unsigned int size, const string& name, char shape, Color color,
+		Direction direction, Point margins)
 : score(0)
 , increasing_length(0)
 , shape(shape)
@@ -11,10 +12,13 @@ Snake::Snake(Point point, int size, string name, char shape, Color color, Direct
 , color(color)
 , last_direction(direction)
 {
-	head_and_body.push_back(point);
-	for(int i = 1; i < size; i++)
+	// Add head
+	head_and_body.push_back(head_start_point);
+
+	// Add body
+	for (unsigned int i = 1; i < size; i++)
 	{
-		Point temp = next_step(head_and_body.back(), direction, margins);
+		Point temp = next_step(head_and_body.back(), opposite(direction), margins);
 		head_and_body.push_back(temp);
 	}
 }
@@ -36,18 +40,18 @@ bool Snake::is_body(Point point) const
 	return false;
 }
 
-void Snake::move(Page* page)
+void Snake::move(Page& page)
 {
 	last_direction = make_decision(page);
-	Point new_head = next_step(get_head(), last_direction, page->get_margins());
+	Point new_head = next_step(get_head(), last_direction, page.get_margins());
 
 	// Check if food is eaten, increase length if so
-	Food* food = page->food_at(new_head);
+	Food* food = page.food_at(new_head);
 	if (food != nullptr)
 	{
 		increasing_length += food->get_value();
 		score += food->get_value();
-		page->delete_food(food);
+		page.delete_food(food);
 	}
 
 	// Move body
@@ -58,7 +62,7 @@ void Snake::move(Page* page)
 		head_and_body.pop_back();
 }
 
-Direction Snake::make_decision(Page* page)
+Direction Snake::make_decision(const Page& page)
 {
 	// TODO
 	//return UP;
@@ -66,9 +70,9 @@ Direction Snake::make_decision(Page* page)
 	vector<Direction> candidate;
 	for (int direction = Direction(LEFT); direction <= Direction(DOWN); direction++)
 	{
-		Point next = next_step(get_head(), Direction(direction), page->get_margins());	
+		Point next = next_step(get_head(), Direction(direction), page.get_margins());
 
-		if(page->is_coordinates_snakes(next))
+		if(page.is_coordinates_snakes(next))
 			continue;
 		
 		candidate.push_back(Direction(direction));

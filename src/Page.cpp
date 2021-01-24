@@ -1,11 +1,13 @@
 #include "Page.h"
 
+#include <iostream>
+
 using namespace std;
 
 Food* Page::food_at(Point point)
 {
 	for (Food* food : foods)
-		if (food->is_in(point))
+		if (*food == point)
 			return food;
 
 	return nullptr;
@@ -27,13 +29,14 @@ void Page::delete_food(Food* food)
 			foods.erase(foods.begin() + i);
 			break;
 		}
-	add_food();
+
+	add_random_food();
 }
 
 void Page::move_once()
 {
 	for (Snake* snake : snakes)
-		snake->move(this);
+		snake->move(*this);
 	
 	for (Snake* snake : snakes)
 		check_crash(snake);
@@ -99,7 +102,7 @@ void Page::check_end_game()
 	}
 }
 
-bool Page::is_coordinates_snakes(Point point)
+bool Page::is_coordinates_snakes(Point point) const
 {
 	for (Snake* snake : snakes)
 		if (point == snake->get_head() || snake->is_body(point))
@@ -107,19 +110,18 @@ bool Page::is_coordinates_snakes(Point point)
 	return false;
 }
 
-void Page::add_food() 
+void Page::add_random_food() 
 {
-	while (true)
+	constexpr unsigned int MAX_TRY = 10;
+	for (unsigned int i = 0; i < MAX_TRY; i++)
 	{
-		// TODO add method: random_point()
-		int x_food = rand() % (margins.x - 2) + 1;
-		int y_food = rand() % (margins.y - 2) + 1;
-		Point point(x_food, y_food);
+		const Point random_point = Point::get_random(Point(1, 1), margins);
 		
-		if (!is_coordinates_snakes(point))
+		if (!is_coordinates_snakes(random_point))
 		{
-			foods.push_back(new Food(point, 1, '#', YELLOW));
-			break;
+			foods.push_back(new Food(random_point, 1, '#', YELLOW));
+			return;
 		}
-	}				
+	}
+	throw string("Page::add_random_food(): No empty space found");
 }

@@ -129,7 +129,7 @@ void print(Page& page)
 			// Foods
 			for (Food* food : page.get_foods())
 			{
-				if (food->is_in(Point(x, y)))
+				if (*food == Point(x, y))
 				{
 					colorized_print(string(1, food->get_shape()), food->get_color());
 					cout << " ";
@@ -160,21 +160,19 @@ int main()
 	vector<Snake*> snakes;
 	vector<Food*> foods;
 
-	Snake S1(Point(22, 3), 5, "Soroosh", '0', BLUE, LEFT, margins);
-	Snake S2(Point(3, 3), 5, "Mehran", '0', GREEN, LEFT, margins);
+	Snake S1(Point(5, 10), 4, "Soroosh", '0', BLUE, RIGHT, margins);
+	Snake S2(Point(25, 10), 4, "Mehran", '0', GREEN, LEFT, margins);
 	snakes.push_back(&S1);
 	snakes.push_back(&S2);
 
-	Food f(Point(15, 10), 1, '1', YELLOW);
-	foods.push_back(&f);
-
 	// Page setting
 	Page page(snakes, foods, margins);
+	page.add_random_food();
 
 	while (!page.is_end_game())
 	{
 		print(page);
-		this_thread::sleep_for(chrono::milliseconds(1000));
+		this_thread::sleep_for(chrono::milliseconds(10));
 		page.move_once();
 
 		//this_thread::sleep_for(chrono::seconds(2));
