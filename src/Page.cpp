@@ -1,17 +1,9 @@
 #include "Page.h"
 
 #include <iostream>
+#include <algorithm>
 
 using namespace std;
-
-Food* Page::food_at(Point point)
-{
-	for (Food* food : foods)
-		if (*food == point)
-			return food;
-
-	return nullptr;
-}
 
 Page::Page(const vector<Snake*>& snakes, Point margins)
 : snakes(snakes)
@@ -20,15 +12,31 @@ Page::Page(const vector<Snake*>& snakes, Point margins)
 {
 }	 
 
-void Page::delete_food(Food* food)
+void Page::add_random_food() 
 {
-	for (unsigned int i = 0; i < foods.size(); i++)
-		if (foods[i] == food)
+	constexpr unsigned int MAX_TRY = 10;
+	for (unsigned int i = 0; i < MAX_TRY; i++)
+	{
+		const Point random_point = Point::get_random(Point(1, 1), margins);
+		
+		if (!is_coordinates_snakes(random_point))
 		{
-			foods.erase(foods.begin() + i);
-			break;
+			foods.push_back(Food(random_point, 1, '#', YELLOW));
+			return;
 		}
+	}
+	throw string("Page::add_random_food(): No empty space found");
+}
 
+list<Food>::iterator Page::find_food(Point point)
+{
+	return find(foods.begin(), foods.end(), point);
+}
+
+void Page::delete_food(const list<Food>::iterator& food)
+{
+	//foods.erase(foods.begin() + 1);
+	foods.erase(food);
 	add_random_food();
 }
 
@@ -107,20 +115,4 @@ bool Page::is_coordinates_snakes(Point point) const
 		if (point == snake->get_head() || snake->is_body(point))
 			return true;
 	return false;
-}
-
-void Page::add_random_food() 
-{
-	constexpr unsigned int MAX_TRY = 10;
-	for (unsigned int i = 0; i < MAX_TRY; i++)
-	{
-		const Point random_point = Point::get_random(Point(1, 1), margins);
-		
-		if (!is_coordinates_snakes(random_point))
-		{
-			foods.push_back(new Food(random_point, 1, '#', YELLOW));
-			return;
-		}
-	}
-	throw string("Page::add_random_food(): No empty space found");
 }

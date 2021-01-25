@@ -1,5 +1,4 @@
 #include <ctime>
-#include <deque>
 #include <thread>
 #include <chrono>
 #include <string>
@@ -139,11 +138,11 @@ void print(const Page& page)
 			}
 	
 			// Foods
-			for (Food* food : page.get_foods())
+			for (Food food : page.get_foods())
 			{
-				if (*food == Point(x, y))
+				if (food == Point(x, y))
 				{
-					colorized_print(string(1, food->get_shape()), food->get_color());
+					colorized_print(string(1, food.get_shape()), food.get_color());
 					cout << " ";
 					print_empty = false;
 					break;

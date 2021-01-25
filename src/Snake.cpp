@@ -46,12 +46,12 @@ void Snake::move(Page& page)
 	Point new_head = next_step(get_head(), last_direction, page.get_margins());
 
 	// Check if food is eaten, increase length if so
-	Food* food = page.food_at(new_head);
-	if (food != nullptr)
+	list<Food>::iterator found_food = page.find_food(new_head);
+	if (found_food != page.get_foods().end())
 	{
-		increasing_length += food->get_value();
-		score += food->get_value();
-		page.delete_food(food);
+		increasing_length += found_food->get_value();
+		score += found_food->get_value();
+		page.delete_food(found_food);
 	}
 
 	// Move body
